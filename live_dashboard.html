@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Live Sensor Readings - ESP8266</title>
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+  <style>
+    body { font-family: Arial, sans-serif; text-align: center; margin-top: 40px; }
+    h1 { color: #333; }
+    table { margin: 0 auto; border-collapse: collapse; font-size: 1.5em; }
+    th, td { border: 1px solid #333; padding: 12px 20px; }
+    th { background-color: #007bff; color: white; }
+    td { color: #333; }
+  </style>
+</head>
+<body>
+  <h1>Live Sensor Readings</h1>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Temperature (°C)</th>
+        <th>Humidity (%)</th>
+        <th>CO (ppm)</th>
+        <th>PM1.0</th>
+        <th>PM2.5</th>
+        <th>PM10</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td id="temp">-</td>
+        <td id="hum">-</td>
+        <td id="co">-</td>
+        <td id="pm1">-</td>
+        <td id="pm25">-</td>
+        <td id="pm10">-</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <script>
+    // --- MQTT Setup ---
+    const client = mqtt.connect('wss://0ba3e4bef3b044a9a01dea1c9176bc0e.s1.eu.hivemq.cloud:8884/mqtt', {
+      username: 'hivemq.webclient.1764143696643',
+      password: 'gt,u:sv0MPE8GDa<5*9Y'
+    });
+
+    client.on('connect', () => {
+      console.log('✅ Connected to HiveMQ Cloud');
+      client.subscribe('esp8266/sensors', (err) => {
+        if (!err) console.log('Subscribed to topic: esp8266/sensors');
+      });
+    });
+
+    client.on('message', (topic, message) => {
+      const payload = JSON.parse(message.toString());
+
+      document.getElementById('temp').innerText = payload.temperature.toFixed(1);
+      document.getElementById('hum').innerText = payload.humidity.toFixed(1);
+      document.getElementById('co').innerText = payload.co.toFixed(1);
+      document.getElementById('pm1').innerText = payload.pm1_0;
+      document.getElementById('pm25').innerText = payload.pm2_5;
+      document.getElementById('pm10').innerText = payload.pm10;
+    });
+
+    client.on('error', (err) => console.error('MQTT error:', err));
+  </script>
+</body>
+</html>
