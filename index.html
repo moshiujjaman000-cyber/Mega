@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>DHT11 Live Dashboard</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <!-- MQTT -->
+  <script src="https://unpkg.com/mqtt/dist/mqtt.min.js"></script>
+
+  <!-- Chart -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <style>
+    body {
+      font-family: Arial;
+      text-align: center;
+      background: #f4f4f4;
+    }
+
+    .card {
+      background: white;
+      padding: 20px;
+      margin: 10px;
+      display: inline-block;
+      border-radius: 10px;
+    }
+
+    canvas {
+      background: white;
+      margin-top: 20px;
+    }
+  </style>
+</head>
+
+<body>
+
+<h2>🌡️ DHT11 Live Dashboard</h2>
+
+<div class="card">
+  <h3>Temperature</h3>
+  <h1 id="temp">--</h1>
+</div>
+
+<div class="card">
+  <h3>Humidity</h3>
+  <h1 id="hum">--</h1>
+</div>
+
+<canvas id="chart"></canvas>
+
+<script src="script.js"></script>
+
+</body>
+</html>
